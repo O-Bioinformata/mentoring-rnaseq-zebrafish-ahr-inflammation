@@ -22,7 +22,9 @@ library(dplyr)
 # Suponha que seu dataframe se chama 'df' com colunas 'gene' e 'log2FoldChange'
 # Ordene os genes pela estatística que deseja usar (e.g., log2FoldChange)
 
-df <- read.csv("ahCutUncut0_allSamples_res05_sig_fc0.csv")
+file <- "DEGs_ahCut1005_allSamples.csv"
+
+df <- read.csv(paste("DEGs/", file, sep = ""))
 df <- df[order(df$log2FoldChange, decreasing = TRUE), ]
 
 
@@ -45,9 +47,12 @@ gsea_result <- GSEA(
 
 # Visualizar resultados
 gsea_result_df <- as.data.frame(gsea_result)
-print(head(gsea_result_df))
+#print(head(gsea_result_df))
 
-write.csv(gsea_result_df, file = "gsea_ahCutUncut0_allSamples_rees05_sig_fc0.csv")
+write.csv(gsea_result_df, file = paste("results_gsea/GSEA_", file, sep = ""))
+
+
+
 
 # Plotar resultados significativos
 library(enrichplot)
@@ -56,7 +61,7 @@ dotplot(gsea_result) + ggtitle("GSEA Dotplot")
 # Exibir as 15 principais categorias com um ajuste de cor para o p-value ajustado
 dotplot(gsea_result, showCategory = 15, color = "p.adjust") + ggtitle("Top 15 GSEA Dotplot")
 
-gseaplot2(gsea_result, geneSetID = 1:28, title = "GSEA Plot for Top Pathway")
+gseaplot2(gsea_result, geneSetID = 1, title = "GSEA Plot for Top Pathway")
 
 
 
